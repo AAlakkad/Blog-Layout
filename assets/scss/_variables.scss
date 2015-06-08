@@ -1,1 +1,11 @@
-$font-family-sans-serif: 'Cantarell', Arial, sans-serif !default;
+$font-family-sans-serif: 'Cantarell', Arial, sans-serif;
+$font-family-serif:      "Helvetica Neue", Helvetica, Arial, sans-serif;
+$headings-font-family:    $font-family-serif;
+$headings-font-weight: 700;
+$font-size-base: 16px;
+
+$brand-primary: #0085A1;
+$gray-dark: lighten(black, 25%);
+$gray: lighten(black, 50%);
+$white-faded: fade(white, 80%);
+$gray-light: #eee;
