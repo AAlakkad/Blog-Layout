@@ -70,15 +70,7 @@ var tasks = {
   clean: function(cb) {
     del(['dist/'], cb);
   },
-
-  // --------------------------
-  // HTML
-  // --------------------------
-  // html templates (when using the connect server)
-  templates: function() {
-    gulp.src('templates/*.html')
-      .pipe(gulp.dest('dist/'));
-  },
+  
   // --------------------------
   // SASS (libsass)
   // --------------------------
@@ -110,19 +102,28 @@ var tasks = {
       // give it a file and save
       .pipe(gulp.dest('dist/css'));
   },
+
   // --------------------------
   // linting
   // --------------------------
   lintjs: function() {
     return gulp.src([
         'gulpfile.js',
-        './assets/js/index.js',
         './assets/js/**/*.js'
       ]).pipe(jshint())
       .pipe(jshint.reporter(stylish))
       .on('error', function() {
         beep();
       });
+  },
+
+  // --------------------------
+  // Uglify
+  // --------------------------
+  uglify: function() {
+    return gulp.src('assets/js/**/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js'));
   },
 
   // --------------------------
@@ -168,13 +169,14 @@ var req = build ? ['clean'] : [];
 // individual tasks
 gulp.task('templates', req, tasks.templates);
 gulp.task('sass', req, tasks.sass);
+gulp.task('uglify', req, tasks.uglify);
 gulp.task('lint:js', tasks.lintjs);
 gulp.task('test', tasks.test);
 
 // --------------------------
 // DEV/WATCH TASK
 // --------------------------
-gulp.task('watch', ['templates', 'sass', 'browser-sync'], function() {
+gulp.task('watch', ['sass', 'uglify', 'browser-sync'], function() {
 
   // --------------------------
   // watch:sass
@@ -184,12 +186,7 @@ gulp.task('watch', ['templates', 'sass', 'browser-sync'], function() {
   // --------------------------
   // watch:js
   // --------------------------
-  gulp.watch('./assets/js/**/*.js', ['lint:js', 'reload-js']);
-
-  // --------------------------
-  // watch:html
-  // --------------------------
-  gulp.watch('./templates/**/*.html', ['reload-templates']);
+  gulp.watch('./assets/js/**/*.js', ['lint:js', 'uglify', 'reload-js']);
 
   gutil.log(gutil.colors.bgGreen('Watching for changes...'));
 });
@@ -197,7 +194,6 @@ gulp.task('watch', ['templates', 'sass', 'browser-sync'], function() {
 // build task
 gulp.task('build', [
   'clean',
-  'templates',
   'sass'
 ]);
 
