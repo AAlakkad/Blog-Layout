@@ -100,6 +100,7 @@ hr.small {
             transition: transform 0.3s;
             background-color: rgba(240, 240, 240, 0.7);
             box-shadow: 0 3px 13px -6px #777;
+            text-shadow: 0 0 3px #ccc;
             .navbar-brand {
                 color: $gray-dark;
                 &:hover,
